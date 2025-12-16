@@ -4,6 +4,11 @@ Aurora Crosshair Controller - GUI for AuroraCrosshairDX overlay
 Allows control of crosshair scale and selection with organized tabs
 """
 
+# TODO:
+# Firstly, fix the random tk exceptions that happen once you try to scroll manually, not
+# using the up and down buttons in the window, but using the scrollwheel --
+# > sometimes the application randomly crashes upon scrolling up
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 import os
@@ -162,11 +167,14 @@ class CrosshairController:
             canvas.configure(yscrollcommand=scrollbar.set)
             
             # Enable mouse wheel scrolling for this canvas
-            def on_mousewheel(event, c=canvas):
-                c.yview_scroll(int(-1*(event.delta/120)), "units")
+            # FIXME: left for later -- disabled the ability to scroll using the mwheel
+            # altogether until it works properly
+            # 
+            # def on_mousewheel(event, c=canvas):
+            #     c.yview_scroll(int(-1*(event.delta/120)), "units")
             
-            canvas.bind("<MouseWheel>", on_mousewheel)
-            scrollable_frame.bind("<MouseWheel>", on_mousewheel)
+            # canvas.bind("<MouseWheel>", on_mousewheel)
+            # scrollable_frame.bind("<MouseWheel>", on_mousewheel)
             
             # Create grid layout for crosshairs (10 columns)
             grid_row = 0
@@ -216,8 +224,10 @@ class CrosshairController:
                         font=("Arial", 7)
                     )
                     btn.pack(fill=tk.BOTH, expand=True, padx=1, pady=1)
-                    btn.bind("<MouseWheel>", on_mousewheel)
-                    btn_frame.bind("<MouseWheel>", on_mousewheel)
+                    # FIXME: scrolling support crashes when going up
+                    # 
+                    # btn.bind("<MouseWheel>", on_mousewheel)
+                    # btn_frame.bind("<MouseWheel>", on_mousewheel)
                     
                 except Exception as e:
                     # Fallback: text only button if image fails to load
@@ -235,8 +245,9 @@ class CrosshairController:
                         font=("Arial", 7)
                     )
                     btn.pack(fill=tk.BOTH, expand=True, padx=1, pady=1)
-                    btn.bind("<MouseWheel>", on_mousewheel)
-                    btn_frame.bind("<MouseWheel>", on_mousewheel)
+                    # FIXME: scroll support
+                    # btn.bind("<MouseWheel>", on_mousewheel)
+                    # btn_frame.bind("<MouseWheel>", on_mousewheel)
                 
                 # Store button reference
                 key = f"{folder_name}/{crosshair}"
