@@ -20,17 +20,20 @@ class CrosshairController:
         self.root = root
         self.root.title("Aurora Crosshair Controller")
         self.root.geometry("1000x700")
-        self.root.resizable(False, False)
+        self.root.resizable(True, True) # Why would it be locked anyways?
         
         # Config path
-        self.config_path = Path.home() / "Documents" / "Crosshair overlay" / "overlay_config.txt"
+        self.project_root = Path.cwd().parent # We're basically in the folder after doing this, I think
+
+        self.config_path = self.project_root / "overlay_config.txt"
+        
         self.config_path.parent.mkdir(parents=True, exist_ok=True)
         
         # Resource path
-        self.resource_path = Path.home() / "Documents" / "Crosshair overlay" / "AuroraCrosshairDX" / "resources" / "crosshairs"
+        self.resource_path = self.project_root / "AuroraCrosshairDX" / "resources" / "crosshairs"
         
         # Overlay exe path
-        self.overlay_exe = Path.home() / "Documents" / "Crosshair overlay" / "AuroraCrosshairDX" / "x64" / "Release" / "AuroraCrosshairDX.exe"
+        self.overlay_exe = self.project_root / "x64" / "Release" / "AuroraCrosshairDX.exe"
         
         self.overlay_running = False
         self.current_scale = 1.0
