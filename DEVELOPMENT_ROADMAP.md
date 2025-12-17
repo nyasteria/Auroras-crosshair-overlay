@@ -283,9 +283,11 @@
 - [Game Development Patterns](https://gameprogrammingpatterns.com/)
 
 ### Similar Projects
-- [Crosshair V2](https://github.com/)
-- [Overlay Framework](https://github.com/)
+- [CrosshairV2](https://github.com/Polyfrost/CrosshairV2)
+- [Overlay Framework](https://github.com/veeenu/hudhook)
+<!-- README: Check out if this is actually the overlay framework that you had in mind -->
 - [Game Utilities](https://github.com/)
+<!-- FIXME: could not find a reference -->
 
 ---
 

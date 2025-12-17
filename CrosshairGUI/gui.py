@@ -5,8 +5,8 @@ Allows control of crosshair scale and selection with organized tabs
 """
 
 # TODO:
-# Firstly, fix the random tk exceptions that happen once you try to scroll manually, not
-# using the up and down buttons in the window, but using the scrollwheel --
+# Firstly, fix the random tk exceptions that happen once you try to scroll manually,
+# not using the up and down buttons in the window, but using the scrollwheel --
 # > sometimes the application randomly crashes upon scrolling up
 
 import tkinter as tk

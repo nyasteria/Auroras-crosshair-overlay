@@ -3,7 +3,13 @@
 #include <cstdio>
 #include <cstring>
 #include <tuple>
+#include <filesystem>
+#include <shlwapi.h>
 
+namespace fs = std::filesystem;
+
+
+#pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "windowscodecs.lib")
 
 HWND g_hWnd = nullptr;
@@ -183,14 +189,35 @@ bool LoadPNGTexture(const wchar_t* filePath)
     return success;
 }
 
+
+std::wstring GetConfigPath(){
+    wchar_t exePath[MAX_PATH];
+    GetModuleFileNameW(NULL, exePath, MAX_PATH);
+    
+    // Convert to filesystem path
+    fs::path exeDir = fs::path(exePath).parent_path();
+    
+    // Go up one level from executable (assuming exe is in AuroraCrosshairDX/x64/Release/)
+    fs::path projectRoot = exeDir.parent_path().parent_path().parent_path();
+    
+    // Now go to your config file
+    fs::path configPath = projectRoot / L"overlay_config.txt";
+    
+    return configPath.wstring();
+}
+
 void LoadConfiguration()
 {
-    // Read scale and crosshair settings from a text file in Documents
-    wchar_t configPath[MAX_PATH];
-    DWORD size = GetEnvironmentVariableW(L"USERPROFILE", configPath, MAX_PATH);
-    if (size == 0) return;
-    
-    wcscat_s(configPath, MAX_PATH, L"\\Documents\\Crosshair overlay\\overlay_config.txt");
+    wchar_t configPath[MAX_PATH];  // Array of MAX_PATH wchar_t
+
+    GetModuleFileNameW(NULL, configPath, MAX_PATH);
+
+    PathRemoveFileSpec(configPath);
+    PathRemoveFileSpec(configPath);
+    PathRemoveFileSpec(configPath);
+    PathRemoveFileSpec(configPath);
+
+    wcscat_s(configPath, MAX_PATH, L"\\overlay_config.txt");
     
     FILE* file = nullptr;
     errno_t err = _wfopen_s(&file, configPath, L"r");
@@ -202,7 +229,7 @@ void LoadConfiguration()
             // Parse scale: scale=1.5
             if (wcsncmp(line, L"scale=", 6) == 0)
             {
-                g_scale = _wtof(line + 6);
+                g_scale = (float) _wtof(line + 6); // type casted to avoid 
                 if (g_scale < 0.5f) g_scale = 0.5f;
                 if (g_scale > 3.0f) g_scale = 3.0f;
             }

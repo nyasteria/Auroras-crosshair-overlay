@@ -1,2 +1,2 @@
 scale=1.0
-crosshair=dots/osupink.png
+crosshair=circles/ql_7.png

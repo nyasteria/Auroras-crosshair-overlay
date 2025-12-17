@@ -24,7 +24,7 @@
          📄 Window.cpp
          📄 CrosshairManager.cpp
       📁 resources/
-         📁 crosshairs/             👈 Place PNG files here
+         📁 crosshairs/              👈 Place PNG files here
    📄 AuroraCrosshairDX.sln          👈 Open in Visual Studio
 ```
 

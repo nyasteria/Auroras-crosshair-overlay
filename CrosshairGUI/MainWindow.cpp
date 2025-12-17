@@ -6,6 +6,7 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QComboBox>
+#include <QCoreApplication>
 #include <QSlider>
 #include <QFileInfo>
 #include <QDir>
@@ -47,6 +48,7 @@ MainWindow::~MainWindow()
 {
     stopOverlayProcess();
 }
+
 
 void MainWindow::setupUI()
 {
@@ -143,10 +145,18 @@ void MainWindow::setupUI()
 void MainWindow::loadCrosshairs()
 {
     // Find crosshairs in resources folder
-    QString resourcePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    resourcePath += "/Crosshair overlay/AuroraCrosshairDX/resources/crosshairs";
 
-    QDir crosshairDir(resourcePath);
+    QString resourcePath = QCoreApplication::applicationDirPath();
+    // Convert from string to dir type
+    QDir resourceDir(resourcePath);
+
+    // Navigate up from executable
+    resourceDir.cdUp(); // Release/ -> x64/
+    resourceDir.cdUp(); // x64/ -> AuroraCrosshairDX/
+
+    resourceDir.cd("resources");
+    resourceDir.cd("crosshairs");
+
     if (!crosshairDir.exists())
     {
         m_statusLabel->setText("Error: Crosshairs folder not found!");
@@ -222,8 +232,7 @@ void MainWindow::startOverlayProcess()
     }
 
     // Find the overlay executable
-    QString overlayExePath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    overlayExePath += "/Crosshair overlay/AuroraCrosshairDX/x64/Release/AuroraCrosshairDX.exe";
+    overlayExePath = QCoreApplication::applicationFilePath();
 
     QFileInfo exeFile(overlayExePath);
     if (!exeFile.exists())
@@ -280,10 +289,20 @@ void MainWindow::stopOverlayProcess()
 void MainWindow::sendSettingsToOverlay()
 {
     // Write configuration to file that overlay reads
-    QString docPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    QString configPath = docPath + "/Crosshair overlay/overlay_config.txt";
+    // Get executable directory
+    QString exeDir = QCoreApplication::applicationDirPath();
+
+    // Create QDir to navigate
+    QDir dir(exeDir);
+    dir.cdUp();
+    dir.cdUp();
+    dir.cdUp(); // at project root
+
+    QString configPath = dir.filePath("overlay_config.txt"); // Get file from directory
 
     QFile configFile(configPath);
+
+    // Write to file
     if (configFile.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         QTextStream out(&configFile);

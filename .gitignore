@@ -64,3 +64,6 @@ ENV/
 
 # Dependencies
 node_modules/
+
+# Lsp errors from wsl
+.clangd
